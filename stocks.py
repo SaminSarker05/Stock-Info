@@ -1,3 +1,10 @@
+# make stock lookup flexible
+# change dates
+# add axis names 
+# add own API code
+# incorporate volume 
+# display latests info on tkinter with BUY OR SELL
+
 from tkinter import *
 import requests
 import json
@@ -25,6 +32,7 @@ try:
         CLOSES.append(float(data["Time Series (5min)"][key]["4. close"]))
         VOLUMES.append(float(data["Time Series (5min)"][key]["5. volume"]))
     
+    plt.title("IBM Stock Price Movement")
     x = list(range(100))
     y = np.array(CLOSES)
     plt.plot(x,y, color = "black", zorder = 1)
@@ -50,16 +58,9 @@ try:
     
     avg_trading_volume = int(sum(VOLUMES) / len(VOLUMES))
     
-
 except Exception as e:
     api = "Error..."
     print(api)
     
 
 root.mainloop()
-
-'''
-
-'''
-
-
