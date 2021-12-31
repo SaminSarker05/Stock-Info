@@ -3,6 +3,7 @@ import requests
 import json
 import matplotlib.pyplot as plt
 import numpy as np
+import itertools
 
 root = Tk()
 root.title("Stock Info")
@@ -24,13 +25,27 @@ try:
         CLOSES.append(float(data["Time Series (5min)"][key]["4. close"]))
         VOLUMES.append(float(data["Time Series (5min)"][key]["5. volume"]))
     
+    x = list(range(100))
+    y = np.array(CLOSES)
+    plt.plot(x,y, color = "black", zorder = 1)
     
-        
+    y1 = []
+    y2 = []
     
-    x1 = np.array(list(range(100)))
-    y1 = np.array(CLOSES)
-    plt.plot(x1, y1, marker = '.', color = 'red')
+    for i in CLOSES:
+        if i > OPENS[CLOSES.index(i)]:
+            y1.append(i) #green
+            y2.append(None)
+        else:
+            y1.append(None)
+            y2.append(i) #red
     
+    y1 = np.array(y1)
+    y2 = np.array(y2)
+    
+    plt.scatter(x, y1, s = 5, color = "green", zorder = 2)
+    plt.scatter(x, y2, s = 5, color = "red", zorder = 2)
+
     plt.show()
     
     avg_trading_volume = int(sum(VOLUMES) / len(VOLUMES))
@@ -44,12 +59,7 @@ except Exception as e:
 root.mainloop()
 
 '''
-colors = []
 
-if CLOSES > OPENS:
-    colors.append('green')
-else:
-    colors.append('red')
 '''
 
 
