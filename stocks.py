@@ -1,10 +1,3 @@
-# make stock lookup flexible
-# change dates
-# add axis names 
-# add own API code
-# incorporate volume 
-# display latests info on tkinter with BUY OR SELL
-
 from tkinter import *
 import requests
 import json
@@ -13,13 +6,13 @@ import numpy as np
 import itertools
 from matplotlib.pyplot import figure
 
-root = Tk()
-root.title("Stock Info")
+ticker = input("Enter ticker symbol: ")
 
-ticker = "IBM"
+root = Tk()
+root.title("Stock info")
 
 try:
-    address = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=6RO1WAKHGHC7B7VC"
+    address = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + ticker + "&interval=5min&apikey=6RO1WAKHGHC7B7VC"
     api_r = requests.get(address)
     data = api_r.json()
     OPENS = []
@@ -38,8 +31,10 @@ try:
         DAY = key[0:10]
         
     fig, axs = plt.subplots(2, 1, sharex = True)
-    fig.suptitle("Price and Volume for Stock on " + DAY)
+    fig.suptitle("Price and Volume for " + ticker + " on " + DAY , fontsize = 10)
     plt.xlabel("Time (5min)")
+    
+    fig.set_size_inches(7.5, 5)
     
     x = list(range(100))
     y = np.array(CLOSES)
@@ -73,13 +68,26 @@ try:
     axs[1].bar(x, v2, color = "red")
     axs[1].set_ylabel('Volume')
     
-    plt.show()
+    avg_trading_volume = str(int(sum(VOLUMES) / len(VOLUMES)))
     
-    avg_trading_volume = int(sum(VOLUMES) / len(VOLUMES))
+    CLOSES = np.array(CLOSES)
+    avg_price = (sum(CLOSES) / len(CLOSES))
+    CLOSES = (CLOSES - avg_price) ** 2
+    
+    standard_dev = str(round((sum(CLOSES) / len(CLOSES)), 3))
     
     
 except Exception as e:
     api = "Error..."
     print(api)
+
+l = Label(root, text = "Average Volume: " + avg_trading_volume, font = ("Courier", 13))
+l.grid(row =  1, column = 1)
+m = Label(root, text = "Standard Deviation: " + standard_dev, font = ("Courier", 13))
+m.grid(row = 2, column = 1)
+
+plt.show()
     
 root.mainloop()
+    
+
