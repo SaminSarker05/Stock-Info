@@ -18,14 +18,10 @@ try:
     OPENS = []
     CLOSES = []
     VOLUMES = []
-    HIGHS = []
-    LOWS = []
     DAY = ""
 
     for key in data["Time Series (5min)"]:
         OPENS.append(float(data["Time Series (5min)"][key]["1. open"]))
-        HIGHS.append(float(data["Time Series (5min)"][key]["2. high"]))
-        LOWS.append(float(data["Time Series (5min)"][key]["3. low"]))
         CLOSES.append(float(data["Time Series (5min)"][key]["4. close"]))
         VOLUMES.append(float(data["Time Series (5min)"][key]["5. volume"]))
         DAY = key[0:10]
@@ -76,7 +72,6 @@ try:
     
     standard_dev = str(round((sum(CLOSES) / len(CLOSES)), 3))
     
-    
 except Exception as e:
     api = "Error..."
     print(api)
@@ -89,5 +84,3 @@ m.grid(row = 2, column = 1)
 plt.show()
     
 root.mainloop()
-    
-
